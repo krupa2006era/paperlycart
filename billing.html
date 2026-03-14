@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PaperlyCart</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    
+<button onclick="logout()" class="logout-btn">Logout</button>
+
+<div class="logo-area">
+<img src="logo.png" class="logo">
+<h1><span class="paperly">Paperly</span><span class="cart">Cart</span></h1>
+</div>
+
+<input type="text" id="search" placeholder="Search products...">
+
+<button onclick="toggleHistory()" class="history-btn">Order History</button>
+
+</header>
+
+<div class="history-panel" id="historyPanel">
+
+<h2>Order History</h2>
+
+<button onclick="exportHistory()">Export History</button>
+
+<div id="orderHistory"></div>
+
+</div>
+
+
+<div class="categories">
+<button onclick="showCategory('all')">All</button>
+
+<button onclick="showCategory('Pens')">Pens</button>
+<button onclick="showCategory('Pencils')">Pencils</button>
+<button onclick="showCategory('Books')">Books</button>
+<button onclick="showCategory('Papers')">Papers</button>
+<button onclick="showCategory('Cups')">Paper Cups</button>
+<button onclick="showCategory('Erasers')">Erasers</button>
+<button onclick="showCategory('Pouches')">Pouches</button>
+<button onclick="showCategory('Sketches')">Sketches</button>
+<button onclick="showCategory('Sharpener')">Sharpener</button>
+<button onclick="showCategory('Scale')">Scale</button>
+<button onclick="showCategory('Paint')">Paint</button>
+<button onclick="showCategory('Accessory')">Accessory</button>
+<button onclick="showCategory('Soap papers')">Soap papers</button>
+<button onclick="showCategory('Leads')">Leads</button>
+<button onclick="showCategory('Motors')">Motors</button>
+<button onclick="showCategory('Sheets')">Sheets</button>
+<button onclick="showCategory('Pen Pencils')">Pen Pencils</button>
+
+
+</div>
+
+
+<div class="main">
+
+<div class="products" id="productList"></div>
+
+<div class="bill-section" id="billSection">
+
+<h2>PaperlyCart Bill</h2>
+
+<div id="billItems"></div>
+
+<hr>
+
+<h3>Total: ₹<span id="total">0</span></h3>
+
+<div class="no-print">
+
+<label>Payment Method:</label>
+<select id="paymentMethod">
+<option>Cash</option>
+<option>PhonePe</option>
+<option>Online</option>
+</select>
+
+<br><br>
+
+<button onclick="printBill()">Print Bill</button>
+<button onclick="completeOrder()">Complete Order</button>
+<button onclick="clearBill()">Clear Bill</button>
+
+</div>
+
+<p class="thank">Thank you for shopping!</p>
+
+</div>
+
+
+
+<script src="products.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

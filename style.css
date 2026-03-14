@@ -1,0 +1,287 @@
+body{
+font-family:Arial;
+margin:0;
+background:#ececec;
+}
+
+.login-box{
+background:white;
+padding:40px;
+width:380px;
+text-align:center;
+border-radius:10px;
+box-shadow:0 0 15px rgba(0,0,0,0.2);
+}
+
+.logo{
+width:100px;
+margin-bottom:20px;
+}
+
+.login-box h2{
+font-size:28px;
+margin-bottom:20px;
+}
+
+.login-box input{
+width:100%;
+padding:18px;
+margin:12px 0;
+font-size:18px;
+border:1px solid #ccc;
+border-radius:6px;
+box-sizing:border-box;
+}
+
+.login-box button{
+width:100%;
+padding:16px;
+font-size:18px;
+background:#007bff;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.login-box button:hover{
+background:#0056b3;
+}
+
+.login-container{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+#loginError{
+color:red;
+margin-top:10px;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#1f1f1f;
+padding:15px 25px;
+}
+
+.logo-area{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.logo{
+width:120px;
+}
+
+h1{
+font-size:44px;
+font-weight:bold;
+margin:0;
+}
+
+.paperly{
+color:purple;
+}
+
+.cart{
+color:#FFD000;
+}
+
+#search{
+padding:12px;
+font-size:18px;
+width:320px;
+border-radius:6px;
+border:none;
+}
+
+/* CATEGORY BAR */
+
+.categories{
+background:#f1c93b;
+padding:12px;
+text-align:center;
+}
+
+.categories button{
+margin:5px;
+padding:10px 25px;
+font-size:18px;
+border:none;
+cursor:pointer;
+border-radius:6px;
+}
+
+.categories button:hover{
+background:#d8b4ff;
+color:black;
+transform:scale(1.08);
+transition:0.2s;
+}
+
+/* MAIN AREA */
+
+.main{
+display:flex;
+}
+
+/* PRODUCT GRID */
+
+.products{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+padding:30px;
+width:calc(100% - 420px);
+}
+
+/* PRODUCT CARD */
+
+.product{
+background:#fff8cc;
+padding:25px;
+border-radius:12px;
+text-align:center;
+box-shadow:0 3px 8px rgba(0,0,0,0.15);
+border:2px solid #f1c40f;
+font-size:18px;
+transition:0.2s;
+}
+
+.product:hover{
+transform:scale(1.03);
+box-shadow:0 5px 12px rgba(0,0,0,0.2);
+}
+
+.product button{
+padding:6px 12px;
+margin-top:8px;
+}
+
+/* BILL AREA */
+
+.bill{
+position:fixed;
+right:20px;
+top:150px;
+width:380px;
+background:white;
+padding:30px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+border-left:5px solid #f1c40f;
+min-height:450px;
+}
+
+.bill h2{
+font-size:26px;
+margin-bottom:15px;
+}
+
+.bill-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+font-size:16px;
+}
+
+.qty-btn{
+padding:4px 8px;
+margin:0 4px;
+border:none;
+background:#f1c40f;
+border-radius:4px;
+cursor:pointer;
+}
+
+.qty-btn:hover{
+background:#d4ac0d;
+}
+
+.thank{
+text-align:center;
+margin-top:20px;
+font-weight:bold;
+}
+
+/* PRINT BILL */
+
+
+@media print {
+
+@page{
+margin:5mm;
+}
+
+/* hide everything */
+body *{
+display:none;
+}
+
+/* show only bill */
+#billSection{
+display:block;
+position:absolute;
+top:0;
+left:0;
+width:300px;
+margin:0;
+padding:10px;
+box-shadow:none;
+border:none;
+}
+
+/* show bill contents */
+#billSection *{
+display:block;
+}
+
+/* hide controls inside bill */
+.no-print,
+button,
+.qty-btn,
+.bill-item div{
+display:none !important;
+}
+
+}
+
+.history-btn{
+padding:10px 18px;
+border:none;
+background:#FFD000;
+font-weight:bold;
+border-radius:6px;
+cursor:pointer;
+}
+
+.history-panel{
+display:none;
+background:white;
+margin:20px;
+padding:20px;
+border-radius:10px;
+box-shadow:0 3px 8px rgba(0,0,0,0.15);
+}
+
+.logout-btn{
+padding:10px 18px;
+background:#ff4d4d;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+margin-left:10px;
+}
+
+.logout-btn:hover{
+background:#cc0000;
+}

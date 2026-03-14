@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - PaperlyCart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="login-container">
+  <div class="login-box">
+    <img src="logo.png" class="logo">
+    <h2>Login</h2>
+
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <p id="loginError"></p>
+  </div>
+</div>
+
+  <script>
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+
+      if (user === "paperlycart" && pass === "2026") {
+        window.location.href = "billing.html";
+      } else {
+        document.getElementById("loginError").textContent =
+          "Invalid username or password";
+      }
+    }
+  </script>
+
+</body>
+</html>
