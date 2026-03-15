@@ -1,7 +1,7 @@
 {
   "name": "PaperlyCart Billing",
   "short_name": "PaperlyCart",
-  "start_url": "login.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1f1f1f",
