@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Login - PaperlyCart</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1f1f1f">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -34,6 +36,11 @@
       }
     }
   </script>
+  <script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>
 
 </body>
 </html>
