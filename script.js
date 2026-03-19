@@ -1,3 +1,19 @@
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBUIjfeb3lBjH68QvU8Uj6fWGDn5xfEeN4",
+  authDomain: "paperlycart.firebaseapp.com",
+  projectId: "paperlycart",
+  storageBucket: "paperlycart.firebasestorage.app",
+  messagingSenderId: "577246075569",
+  appId: "1:577246075569:web:c59a37b49eda34fbefa090"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+
 let cart = {}
 let total = 0
 let orderHistory = JSON.parse(localStorage.getItem("orderHistory")) || []
@@ -17,9 +33,10 @@ let div = document.createElement("div")
 div.className = "product"
 
 div.innerHTML = `
+<img src="${product.image}" alt="${product.name}" style="width:120px; height:auto; margin-bottom:10px;">
 <h3>${product.name}</h3>
 <p>₹${product.price}</p>
-<p>pieces per box: ${product.pieces} pcs</p>
+<p>Pieces: ${product.pieces}</p>
 
 <input type="number" id="qty-${product.name}" value="1" min="1" style="width:60px">
 
@@ -171,28 +188,38 @@ updateBill()
 
 function completeOrder(){
 
-if(Object.keys(cart).length === 0){
-alert("Cart is empty")
-return
-}
+  if(Object.keys(cart).length === 0){
+    alert("Cart is empty");
+    return;
+  }
 
-let payment = document.getElementById("paymentMethod").value
+  // Customer details
+  let customerName = document.getElementById("customerName").value;
+  let customerPhone = document.getElementById("customerPhone").value;
 
-let totalAmount = 0
+  // Payment method
+  let paymentMethod = document.getElementById("paymentMethod").value;
 
-for(let item in cart){
-totalAmount += cart[item].price * cart[item].qty
-}
+  // Calculate total
+  let totalAmount = 0;
 
-let now = new Date()
+  for(let item in cart){
+    totalAmount += cart[item].price * cart[item].qty;
+  }
 
+  // Create order object
 let order = {
-date: now.toLocaleDateString(),
-time: now.toLocaleTimeString(),
-total: total,
-payment: payment,
-items: cart
-}
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString(),
+    customerName: customerName,
+    customerPhone: customerPhone,
+    payment: paymentMethod,
+    total: totalAmount,
+    items: cart
+  };
+
+  // 🔥 Save to Firebase
+saveToFirebase(order);
 
 orderHistory.push(order)
 
@@ -283,4 +310,14 @@ a.click()
 
 function logout(){
     window.location.href = "index.html";
+}
+
+function saveToFirebase(order){
+  db.collection("orders").add(order)
+  .then(() => {
+    console.log("Order saved");
+  })
+  .catch((error) => {
+    console.log("Error:", error);
+  });
 }
