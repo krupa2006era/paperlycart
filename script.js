@@ -11,7 +11,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 
 let cart = {}
