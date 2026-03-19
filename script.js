@@ -188,6 +188,8 @@ updateBill()
 
 function completeOrder(){
 
+  console.log("Complete Order clicked");
+
   if(Object.keys(cart).length === 0){
     alert("Cart is empty");
     return;
@@ -208,29 +210,40 @@ function completeOrder(){
   }
 
   // Create order object
-let order = {
+  let order = {
     date: new Date().toLocaleDateString(),
     time: new Date().toLocaleTimeString(),
     customerName: customerName,
     customerPhone: customerPhone,
     payment: paymentMethod,
     total: totalAmount,
-    items: cart
+    items: {...cart}
   };
 
+  console.log(order);
+
   // 🔥 Save to Firebase
-saveToFirebase(order);
+  saveToFirebase(order);
 
-orderHistory.push(order)
+  // ✅ Save locally (for history display)
+  let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
+  history.push(order);
+  localStorage.setItem("orderHistory", JSON.stringify(history));
 
-localStorage.setItem("orderHistory", JSON.stringify(orderHistory))
+  // ✅ Update history UI (if you have function)
+  if(typeof displayHistory === "function"){
+    displayHistory();
+  }
 
-displayHistory()
+  // ✅ Clear cart
+  cart = {};
+  updateBill();
 
-alert("Order saved successfully")
+  // ✅ Clear inputs
+  document.getElementById("customerName").value = "";
+  document.getElementById("customerPhone").value = "";
 
-cart = {}
-updateBill()
+  alert("Order Saved Successfully");
 
 }
 
