@@ -153,72 +153,46 @@ displayProducts(filtered)
 
 function printBill(){
 
-if(Object.keys(cart).length === 0){
-alert("Cart is empty")
-return
-}
-
-let payment = document.getElementById("paymentMethod").value
-
-let totalAmount = 0
-
-for(let item in cart){
-totalAmount += cart[item].price * cart[item].qty
-}
-
-let order = {
-date: new Date().toLocaleString(),
-total: totalAmount,
-items: {...cart},
-payment: payment
-}
-
-orderHistory.push(order)
-
-localStorage.setItem("orderHistory", JSON.stringify(orderHistory))
-
-displayHistory()
-
-window.print()
-
-cart = {}
-updateBill()
-
-}
-
-function completeOrder(){
-
-  console.log("Complete Order clicked");
-
   if(Object.keys(cart).length === 0){
     alert("Cart is empty");
     return;
   }
 
-  // Customer details
+  let payment = document.getElementById("paymentMethod").value;
+
   let customerName = document.getElementById("customerName").value;
   let customerPhone = document.getElementById("customerPhone").value;
 
-  // Payment method
-  let paymentMethod = document.getElementById("paymentMethod").value;
-
-  // Calculate total
   let totalAmount = 0;
 
   for(let item in cart){
     totalAmount += cart[item].price * cart[item].qty;
   }
 
-  // Create order object
+  // ✅ FIXED: Added customer details
   let order = {
-    date: new Date().toLocaleDateString(),
-    time: new Date().toLocaleTimeString(),
+    date: new Date().toLocaleString(),
     customerName: customerName,
     customerPhone: customerPhone,
-    payment: paymentMethod,
+    payment: payment,
     total: totalAmount,
     items: {...cart}
   };
+
+  // Save to history
+  orderHistory.push(order);
+  localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
+
+  displayHistory();
+
+  // 🔥 Save last order for printing
+  localStorage.setItem("lastOrder", JSON.stringify(order));
+
+  window.print();
+
+  cart = {};
+  updateBill();
+}
 
   console.log(order);
 
@@ -230,6 +204,7 @@ function completeOrder(){
   history.push(order);
   localStorage.setItem("orderHistory", JSON.stringify(history));
 
+  localStorage.setItem("lastOrder", JSON.stringify(order));
   // ✅ Update history UI (if you have function)
   if(typeof displayHistory === "function"){
     displayHistory();
@@ -245,7 +220,7 @@ function completeOrder(){
 
   alert("Order Saved Successfully");
 
-}
+
 
 function displayHistory(){
 
