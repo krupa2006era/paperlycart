@@ -158,147 +158,174 @@ function printBill(){
     return;
   }
 
-  let payment = document.getElementById("paymentMethod").value;
-
   let customerName = document.getElementById("customerName").value;
   let customerPhone = document.getElementById("customerPhone").value;
+  let payment = document.getElementById("paymentMethod").value;
 
   let totalAmount = 0;
+  let itemsHTML = "";
 
   for(let item in cart){
-    totalAmount += cart[item].price * cart[item].qty;
+    let p = cart[item];
+    totalAmount += p.price * p.qty;
+
+    itemsHTML += `
+      <tr>
+        <td>${item}</td>
+        <td>${p.qty}</td>
+        <td>${p.price}</td>
+        <td>${p.price * p.qty}</td>
+      </tr>
+    `;
   }
 
-  // ✅ FIXED: Added customer details
+  let billContent = `
+    <html>
+    <head>
+      <title>Bill</title>
+      <style>
+        body { font-family: Arial; padding: 20px; }
+        h2 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table, th, td { border: 1px solid black; }
+        th, td { padding: 8px; text-align: center; }
+      </style>
+    </head>
+    <body>
+
+      <h2>Bill</h2>
+
+      <p><b>Customer Name:</b> ${customerName}</p>
+      <p><b>Phone:</b> ${customerPhone}</p>
+      <p><b>Date:</b> ${new Date().toLocaleString()}</p>
+
+      <table>
+        <tr>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+        ${itemsHTML}
+      </table>
+
+      <h3>Total: ₹${totalAmount}</h3>
+      <p><b>Payment:</b> ${payment}</p>
+
+    </body>
+    </html>
+  `;
+
+  let printWindow = window.open("", "", "width=800,height=600");
+  printWindow.document.write(billContent);
+  printWindow.document.close();
+
+  printWindow.onload = function(){
+    printWindow.print();
+  };
+
   let order = {
     date: new Date().toLocaleString(),
-    customerName: customerName,
-    customerPhone: customerPhone,
-    payment: payment,
+    customerName,
+    customerPhone,
+    payment,
     total: totalAmount,
     items: {...cart}
   };
 
-  // Save to history
-  orderHistory.push(order);
-  localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
-
-  displayHistory();
-
-  // 🔥 Save last order for printing
-  localStorage.setItem("lastOrder", JSON.stringify(order));
-
-  window.print();
+  saveToFirebase(order);
+  
+  loadHistoryFromFirebase();
 
   cart = {};
   updateBill();
 }
 
-  console.log(order);
 
-  // 🔥 Save to Firebase
-  saveToFirebase(order);
-
-  // ✅ Save locally (for history display)
-  let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
-  history.push(order);
-  localStorage.setItem("orderHistory", JSON.stringify(history));
-
-  localStorage.setItem("lastOrder", JSON.stringify(order));
-  // ✅ Update history UI (if you have function)
-  if(typeof displayHistory === "function"){
-    displayHistory();
-  }
-
-  // ✅ Clear cart
-  cart = {};
-  updateBill();
-
-  // ✅ Clear inputs
-  document.getElementById("customerName").value = "";
-  document.getElementById("customerPhone").value = "";
-
-  alert("Order Saved Successfully");
-
-
+// ================= HISTORY =================
 
 function displayHistory(){
 
-let historyDiv = document.getElementById("orderHistory")
+  let historyDiv = document.getElementById("orderHistory");
+  historyDiv.innerHTML = "";
 
-historyDiv.innerHTML=""
+  let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
 
-orderHistory.forEach((order,index)=>{
+  history.forEach((order,index)=>{
 
-let div = document.createElement("div")
+    let div = document.createElement("div");
 
-div.innerHTML = `
-<p><b>Order ${index+1}</b></p>
-<p>Date: ${order.date}</p>
-<p>Total: ₹${order.total}</p>
-<p>Payment: ${order.payment}</p>
-<hr>
-`
+    div.innerHTML = `
+      <p><b>Order ${index+1}</b></p>
+      <p>Name: ${order.customerName || ""}</p>
+      <p>Phone: ${order.customerPhone || ""}</p>
+      <p>Date: ${order.date}</p>
+      <p>Total: ₹${order.total}</p>
+      <p>Payment: ${order.payment}</p>
+      <hr>
+    `;
 
-historyDiv.appendChild(div)
-
-})
-
+    historyDiv.appendChild(div);
+  });
 }
+
+
+// ================= CLEAR BILL =================
 
 function clearBill(){
-
-cart = {}
-updateBill()
-
+  cart = {};
+  updateBill();
 }
+
+
+// ================= TOGGLE HISTORY =================
 
 function toggleHistory(){
 
-let panel = document.getElementById("historyPanel")
+  let panel = document.getElementById("historyPanel");
 
-if(panel.style.display === "none"){
-panel.style.display = "block"
-}
-else{
-panel.style.display = "none"
-}
-
-
-
+  if(panel.style.display === "none"){
+    panel.style.display = "block";
+  } else {
+    panel.style.display = "none";
+  }
 }
 
-displayHistory()
+
+// ================= EXPORT CSV =================
 
 function exportHistory(){
 
-let csv = "Order,Date,Time,Payment,Total\n"
+  let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
 
-orderHistory.forEach((order,index)=>{
+  let csv = "Order,Date,Payment,Total\n";
 
-let dateText = `"${order.date || ""}"`
-let timeText = `"${order.time || ""}"`
+  history.forEach((order,index)=>{
 
-csv += `${index+1},${dateText},${timeText},${order.payment},${order.total}\n`
+    let dateText = `"${order.date || ""}"`;
 
-})
+    csv += `${index+1},${dateText},${order.payment},${order.total}\n`;
 
-let blob = new Blob([csv], { type: "text/csv" })
+  });
 
-let url = window.URL.createObjectURL(blob)
+  let blob = new Blob([csv], { type: "text/csv" });
+  let url = window.URL.createObjectURL(blob);
 
-let a = document.createElement("a")
-
-a.href = url
-a.download = "order_history.csv"
-
-a.click()
-
+  let a = document.createElement("a");
+  a.href = url;
+  a.download = "order_history.csv";
+  a.click();
 }
+
+
+// ================= LOGOUT =================
 
 function logout(){
-    window.location.href = "index.html";
+  window.location.href = "index.html";
 }
+
+
+// ================= FIREBASE =================
 
 function saveToFirebase(order){
   db.collection("orders").add(order)
@@ -309,3 +336,52 @@ function saveToFirebase(order){
     console.log("Error:", error);
   });
 }
+
+
+// ================= LOAD HISTORY =================
+
+displayHistory();
+
+
+// ================= COMPLETE ORDER =================
+
+function completeOrder(){
+  printBill();
+}
+
+function loadHistoryFromFirebase(){
+
+  let historyDiv = document.getElementById("orderHistory");
+  historyDiv.innerHTML = "";
+
+  db.collection("orders")
+    .orderBy("date", "desc")
+    .get()
+    .then((querySnapshot) => {
+
+      querySnapshot.forEach((doc, index) => {
+
+        let order = doc.data();
+
+        let div = document.createElement("div");
+
+        div.innerHTML = `
+          <p><b>Order</b></p>
+          <p>Name: ${order.customerName || ""}</p>
+          <p>Phone: ${order.customerPhone || ""}</p>
+          <p>Date: ${order.date}</p>
+          <p>Total: ₹${order.total}</p>
+          <p>Payment: ${order.payment}</p>
+          <hr>
+        `;
+
+        historyDiv.appendChild(div);
+
+      });
+
+    })
+    .catch((error) => {
+      console.log("Error loading history:", error);
+    });
+}
+
