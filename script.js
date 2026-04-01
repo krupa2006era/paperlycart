@@ -1,4 +1,5 @@
 // Your web app's Firebase configuration
+localStorage.removeItem("orderHistory");
 const firebaseConfig = {
   apiKey: "AIzaSyBUIjfeb3lBjH68QvU8Uj6fWGDn5xfEeN4",
   authDomain: "paperlycart.firebaseapp.com",
@@ -340,7 +341,7 @@ function saveToFirebase(order){
 
 // ================= LOAD HISTORY =================
 
-displayHistory();
+loadHistoryFromFirebase();
 
 
 // ================= COMPLETE ORDER =================
