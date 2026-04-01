@@ -25,6 +25,7 @@ const products = [
   { name: "ADD GEL PENS", price: 10, pieces: 10, category: "Pens",image:"images/addgel.png"},
   { name: "FLAIR NEO PENS", price: 70, pieces: 10, category: "Pens",image:"images/flairneo.png" },
   { name: "BRITE PENS", price: 20, pieces: 5, category: "Pens",image:"images/br.png" },
+  { name: "RX1 PENS", price: 85, pieces:25, category: "Pens",image:"rx1.png"},
   
 
   { name: "APSARA TIDY ERASERS", price: 200, pieces: 20, category: "Erasers",image:"images/tidy.png" },
@@ -58,7 +59,7 @@ const products = [
   { name: "PAPER SOAPES", price: 480, pieces: 24, category: "Soap papers",image:"images/soap.png" },
 
 
-  { name: "POUCHES", price: 200, pieces: 20, category: "Pouches" },
+  { name: "POUCHES", price: 200, pieces: 20, category: "Pouches",image:"images/p.png" },
 
 
   { name: "PROJECT MOTORS", price: 220, pieces: 12, category: "Motors" },

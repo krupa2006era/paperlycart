@@ -366,7 +366,7 @@ function loadHistoryFromFirebase(){
         let div = document.createElement("div");
 
         div.innerHTML = `
-          <p><b>Order</b></p>
+          <p><b>Order ${index = 1}</b></p>
           <p>Name: ${order.customerName || ""}</p>
           <p>Phone: ${order.customerPhone || ""}</p>
           <p>Date: ${order.date}</p>
